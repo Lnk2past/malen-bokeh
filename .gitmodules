@@ -1,0 +1,3 @@
+[submodule "include/malen"]
+	path = include/malen
+	url = https://github.com/Lnk2past/malen
