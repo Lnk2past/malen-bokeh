@@ -1,6 +1,8 @@
 #include "malen/malen.h"
 #include <string>
 
+namespace mb
+{
 class MalenBokeh : public malen::Malen
 {
 public:
@@ -61,3 +63,4 @@ public:
         invoke("malenbokeh", __FUNCTION__, malen::args(figure, filename), malen::kwargs(kw...));
     }
 };
+}

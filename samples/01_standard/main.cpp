@@ -19,13 +19,12 @@ int main()
 
     make_data(size, x_data, y_data, c_data);
 
-    MalenBokeh mb;
+    mb::MalenBokeh mb;
     auto figure = mb.make_new_figure("Test Plot", malen::kwarg("x_range", std::vector<int>{0,size}), malen::kwarg("y_range", std::vector<int>{0,size}));
 
     auto sc = mb.plot(figure, "circle", x_data, y_data[0], malen::kwarg("color", c_data));
     auto slider = mb.slider(sc, "Test Scatter", 0, size-1, malen::kwarg("y", y_data));
-    auto layout = mb.layout(figure, slider);
-    mb.generate_html(layout, "test.html");
+    mb.generate_html(mb.layout(figure, slider), "test.html");
 }
 
 void make_data(int size, std::vector<int> &x_data, std::vector<std::vector<int>> &y_data, std::vector<int> &c_data)
