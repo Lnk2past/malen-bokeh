@@ -86,7 +86,7 @@ def slider(renderer, title, start, end, **kwargs):
     slider.js_on_change('value', slider_callback)
 
     js_button_callback_source ='''
-for (i=slider.start; i <= slider.end; i++){
+for (var i=slider.start; i <= slider.end; i++){
     setTimeout((source, slider, i) => {
         slider.value = i;
         source.change.emit();
