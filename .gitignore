@@ -1,4 +1,9 @@
 *.exe
 *.o
+*.obj
 *.d
+*.dep
 __pycache__
+*.pyc
+build
+dist
