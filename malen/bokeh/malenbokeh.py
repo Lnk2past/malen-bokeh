@@ -19,20 +19,7 @@ def make_new_figure(title, plot_width=720, plot_height=640, **kwargs):
         plot_width (int): width in pixels
         plot_height (int): height in pixels
 
-    Returns:    Malen(const std::string &module_name, const std::vector<std::string> &additional_paths = std::vector<std::string>())
-    {
-        Py_Initialize();
-        for (auto path : additional_paths)
-        {
-            PyList_Append(PySys_GetObject("path"), convert_to_python(path));
-        }
-        py_module = PyImport_ImportModule(module_name.c_str());
-        if (!py_module)
-        {
-            PyErr_PrintEx(1);
-            throw std::runtime_error("There were problems loading the " + module_name + " module.");
-        }
-    }
+    Returns:
         bokeh.plotting.figure.Figure object to be graphed on
     """
     kwargs['plot_width'] = plot_width
