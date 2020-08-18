@@ -9,7 +9,7 @@ public:
     template <typename... KW>
     PyObject* make_new_figure(const std::string &title, KW... kw)
     {
-        return invoke("malen.bokeh.", __FUNCTION__, args(title), kwargs(kw...));
+        return invoke("malen.bokeh", __FUNCTION__, args(title), kwargs(kw...));
     }
 
     template <template<typename...> class C1, template<typename...> class C2, typename T1, typename T2, typename... KW>
