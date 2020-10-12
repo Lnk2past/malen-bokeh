@@ -11,20 +11,19 @@ from bokeh.plotting import figure, output_file, save, ColumnDataSource
 from bokeh.palettes import viridis as palette
 
 
-def make_new_figure(title, plot_width=720, plot_height=640, **kwargs):
+def make_new_figure(title, **kwargs):
     """Create a new figure
 
     Arguments:
         title (str): name of the figure
-        plot_width (int): width in pixels
-        plot_height (int): height in pixels
+        kwargs: Figure properties
 
     Returns:
         bokeh.plotting.figure.Figure object to be graphed on
     """
-    kwargs['plot_width'] = plot_width
-    kwargs['plot_height'] = plot_height
-    fig = figure(**kwargs)
+    kwargs.setdefault('plot_width', 720)
+    kwargs.setdefault('plot_height', 640)
+    fig = figure(title=title, **kwargs)
     return fig
 
 
@@ -47,10 +46,11 @@ def plot(fig, plot_type, x, y, **kwargs):
     if plot_type == 'line':
         return fig.line(**source_keys, source=source, **kwargs)
     elif plot_type == 'vbar':
-        kwargs['width'] = kwargs.get('width', 1)
+        kwargs.setdefault('width', 1)
         return fig.vbar(**source_keys, source=source, **kwargs)
     else:
         return fig.scatter(**source_keys, marker=plot_type, source=source, **kwargs)
+
 
 def image(fig, image, **kwargs):
     """
