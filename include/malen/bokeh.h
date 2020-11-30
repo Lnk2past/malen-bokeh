@@ -43,7 +43,7 @@ public:
     }
 
     template <typename... KW>
-    void color_bar(PyObject *figure, KW... kw)
+    PyObject* color_bar(PyObject *figure, KW... kw)
     {
         return invoke("malen.bokeh", __FUNCTION__, args(figure), kwargs(kw...));
     }

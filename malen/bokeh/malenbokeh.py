@@ -174,6 +174,15 @@ def _pack_column_data_source(kwargs, source):
     if 'size' in kwargs and isinstance(kwargs['size'], list):
         source.add(kwargs['size'], 'size')
         del kwargs['size']
+    if 'radius' in kwargs and isinstance(kwargs['radius'], list):
+        source.add(kwargs['radius'], 'radius')
+        del kwargs['radius']
+    if 'c' in kwargs and isinstance(kwargs['c'], list):
+        source.add(kwargs['c'], 'color')
+        del kwargs['c']
+    if 'line_color' in kwargs and isinstance(kwargs['line_color'], list):
+        source.add(kwargs['line_color'], 'line_color')
+        del kwargs['line_color']
     if 'color' in kwargs and isinstance(kwargs['color'], list):
         p = palette(max(kwargs['color']))
         source.add([p[i-1] for i in kwargs['color']], 'color')
