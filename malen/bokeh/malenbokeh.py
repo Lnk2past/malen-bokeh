@@ -191,6 +191,11 @@ def _pack_column_data_source(kwargs, source):
         source.add(kwargs['marker'], 'marker')
         del kwargs['marker']
 
+    # TODO i hate this
+    for k,v in list(kwargs.items()):
+        if isinstance(v, list):
+            source.add(v, k)
+            del kwargs[k]
 
 if __name__ == '__main__':
     import random
