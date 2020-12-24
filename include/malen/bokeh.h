@@ -31,6 +31,12 @@ public:
     }
 
     template <typename... KW>
+    PyObject* image_slider(PyObject* renderer, const std::string &title, const std::size_t start, const std::size_t end, KW... kw)
+    {
+        return invoke("malen.bokeh", __FUNCTION__, args(renderer, title, start, end), kwargs(kw...));
+    }
+
+    template <typename... KW>
     PyObject* ticker(const std::string &ticker_type, KW... kw)
     {
         return invoke("malen.bokeh", __FUNCTION__, args(ticker_type), kwargs(kw...));

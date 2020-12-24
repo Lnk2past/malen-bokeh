@@ -6,7 +6,7 @@ from bokeh.layouts import row, column
 from bokeh.models import HoverTool, CustomJS, Slider, ColorBar
 from bokeh.models.mappers import *
 from bokeh.models.tickers import *
-from bokeh.models.widgets import Button
+from bokeh.models.widgets import Button, Toggle
 from bokeh.plotting import figure, output_file, save, ColumnDataSource
 from bokeh.palettes import viridis as palette
 
@@ -73,17 +73,69 @@ def slider(renderer, title, start, end, **kwargs):
     slider.js_on_change('value', slider_callback)
 
     js_button_callback_source ='''
-for (var i=slider.start; i <= slider.end; i++){
-    setTimeout((source, slider, i) => {
-        slider.value = i;
-        source.change.emit();
-    }, 20 * i, source, slider, i);
-}
-'''
-    button_callback = CustomJS(args=dict(slider=slider, source=renderer.data_source, source2=source2), code=js_button_callback_source)
-    button = Button(label="Play", button_type="success")
-    button.js_on_event(events.ButtonClick, button_callback)
-    return row(slider, button)
+        var i = slider.value === slider.end ? slider.start : slider.value;
+        function f() {
+            if (!play_button.active) return;
+            slider.value = i;
+            source.change.emit();
+            play_button.active = i !== slider.end;
+            i++;
+            if (i <= slider.end) {
+                setTimeout(f, 0.033 * i, source, slider, i);
+            }
+        }
+        f();
+    '''
+
+    toggle_callback = CustomJS(args=dict(slider=slider, source=renderer.data_source, source2=source2), code=js_button_callback_source)
+    toggle = Toggle(label="Start/Stop", button_type="success")
+    toggle.js_on_event(events.ButtonClick, button_callback)
+    return row(slider, toggle)
+
+
+def image_slider(renderer, title, start, end, **kwargs):
+    """
+    TBD
+    """
+    source2 = ColumnDataSource(data=kwargs)
+    slider_callback = bokeh.models.CustomJS(args=dict(source=source2, im=renderer), code='''
+        var image_source = im.data_source;
+        var d = image_source.data['image'][0];
+        var f = slider.value;
+        for (var j = 0; j < y; j++){
+            for (var i = 0; i < x; i++) {
+                d[j*y + i] = source.data['image'][f * x * y + j*y + i]
+            }
+        }
+        image_source.change.emit();
+    ''')
+
+    slider = Slider(start=start, end=end, value=0, step=1, title=title)
+    slider.js_on_change('value', slider_callback)
+    slider_callback.args['x'] = len(kwargs['image'][0][0])
+    slider_callback.args['y'] = len(kwargs['image'][0])
+    slider_callback.args['slider'] = slider
+
+    js_play_button_callback_source ='''
+        var i = slider.value === slider.end ? slider.start : slider.value;
+        function f() {
+            if (!play_button.active) return;
+            slider.value = i;
+            source.change.emit();
+            play_button.active = i !== slider.end;
+            i++;
+            if (i <= slider.end) {
+                setTimeout(f, 0.033 * i, source, slider, i);
+            }
+        }
+        f();
+    '''
+
+    play_toggle = Toggle(label="Start/Stop", button_type="success")
+    play_toggle_callback = CustomJS(args=dict(slider=slider, play_button=play_button, source=renderer.data_source), code=js_play_button_callback_source)
+    play_toggle.js_on_click(play_toggle_callback)
+
+    return row(slider, play_button)
 
 
 def ticker(ticker_type, **kwargs):
